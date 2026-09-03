@@ -1,5 +1,6 @@
 // Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+// Modified by Filipp Zapolskikh
 
 // Run with "web" command-line argument for web server.
 // See page 13.
@@ -28,11 +29,11 @@ import (
 
 //!+main
 
-var palette = []color.Color{color.White, color.Black}
+var palette = []color.Color{color.Black, color.RGBA{0x00, 0xff, 0x00, 0xff}}
 
 const (
-	whiteIndex = 0 // first color in palette
-	blackIndex = 1 // next color in palette
+	backgroundIndex = 0
+	foregroundIndex = 1
 )
 
 func main() {
@@ -74,7 +75,7 @@ func lissajous(out io.Writer) {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
 			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5),
-				blackIndex)
+				foregroundIndex)
 		}
 		phase += 0.1
 		anim.Delay = append(anim.Delay, delay)
