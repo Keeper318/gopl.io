@@ -1,5 +1,6 @@
 // Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+// Modified by Filipp Zapolskikh
 
 // See page 17.
 //!+
@@ -9,9 +10,8 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"io/ioutil"
 	"net/http"
+	neturl "net/url"
 	"os"
 	"time"
 )
@@ -36,7 +36,13 @@ func fetch(url string, ch chan<- string) {
 		return
 	}
 
-	nbytes, err := io.Copy(ioutil.Discard, resp.Body)
+	file, err := os.Create(neturl.QueryEscape(url))
+	if err != nil {
+		ch <- err.Error()
+		return
+	}
+	defer file.Close()
+	nbytes, err := file.ReadFrom(resp.Body)
 	resp.Body.Close() // don't leak resources
 	if err != nil {
 		ch <- fmt.Sprintf("while reading %s: %v", url, err)
