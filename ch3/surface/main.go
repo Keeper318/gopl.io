@@ -1,5 +1,6 @@
 // Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+// Modified by Filipp Zapolskikh
 
 // See page 58.
 //!+
@@ -33,6 +34,9 @@ func main() {
 			bx, by := corner(i, j)
 			cx, cy := corner(i, j+1)
 			dx, dy := corner(i+1, j+1)
+			if math.IsInf(ay, 0) || math.IsInf(by, 0) || math.IsInf(cy, 0) || math.IsInf(dy, 0) {
+				continue
+			}
 			fmt.Printf("<polygon points='%g,%g %g,%g %g,%g %g,%g'/>\n",
 				ax, ay, bx, by, cx, cy, dx, dy)
 		}
